@@ -1,0 +1,16 @@
+- name: some_service
+  connect_timeout: 0.25s
+  type: STRICT_DNS
+  lb_policy: ROUND_ROBIN
+  hosts:
+  - socket_address:
+      address: app1
+      port_value: 8123
+# - name: some_service2
+#   connect_timeout: 0.25s
+#   type: STRICT_DNS
+#   lb_policy: ROUND_ROBIN
+#   hosts:
+#   - socket_address:
+#       address: app2
+#       port_value: 8123
