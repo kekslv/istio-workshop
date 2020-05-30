@@ -16,7 +16,6 @@ services:
   #     - "8000:80"
   #     - "8001:8001"
 
-
   service1:
     container_name: nginx_service1
     image: nginx:alpine

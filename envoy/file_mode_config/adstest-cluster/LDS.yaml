@@ -17,8 +17,14 @@
             - "*"
             routes:
             - match:
-                prefix: "/"
+                prefix: "/service1"
               route:
                 cluster: some_service
+                prefix_rewrite: "/"
+            - match:
+                prefix: "/service2"
+              route:
+                cluster: some_service2
+                prefix_rewrite: "/"
         http_filters:
         - name: envoy.router
