@@ -11,8 +11,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Quote {
-    private int id;
+public class Joke {
     private String joke;
     private String rating;
 }
