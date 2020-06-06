@@ -28,21 +28,21 @@ function tryParseJSON(body) {
 /* GET home page. */
 router.get('/', function(req, res, next) {
   let quoteServiceUrl = process.env.QUOTE_SERVICE_URL || "http://localhost:8080"
-  let options = createOptions(quoteServiceUrl + "/quote", req);
+  let options = createOptions(quoteServiceUrl + "/joke", req);
   request(options, function(err, response, body) {
     if (err) {
       res.render("error", {message: "Unexpected error occurred", error: err})
       return;
     }
     if (!response) {
-      res.render("index", {quote: null, error: "Unable to parse response"})
+      res.render("error", {message: "Unable to parse response", error: {status: "No response!"}})
       return;
     }
     let responseBody = tryParseJSON(response.body);
     if (responseBody != null) {
-      res.render("index", {quote: responseBody, error: null})
+      res.render("index", {msg: responseBody, error: null})
     } else {
-      res.render("index", {quote: null, error: response.body})
+      res.render("index", {msg: null, error: response.body})
     }
   })
 });
