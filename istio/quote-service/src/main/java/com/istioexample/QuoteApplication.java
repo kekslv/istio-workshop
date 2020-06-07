@@ -24,9 +24,14 @@ public class QuoteApplication {
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
 
-        var jokesDbUrl = System.getenv().getOrDefault("JOKES_DB_URL", "http://api.icndb.com/jokes/random");
+        var jokesDbUrl = System.getenv().getOrDefault("JOKES_DB_URL", "http://api.icndb.com");
+        var category = System.getenv().getOrDefault("EXCLUDE_EXPLICIT", "true");
+        var jokeUrl = jokesDbUrl + "/jokes/random";
+        if (!Boolean.parseBoolean(category)) {
+            jokeUrl += "?exclude=explicit";
+        }
         var request = HttpRequest.newBuilder()
-                .uri(URI.create(jokesDbUrl))
+                .uri(URI.create(jokeUrl))
                 .timeout(Duration.ofMinutes(1))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.noBody())
