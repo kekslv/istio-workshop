@@ -25,9 +25,9 @@ public class QuoteApplication {
                 .build();
 
         var jokesDbUrl = System.getenv().getOrDefault("JOKES_DB_URL", "http://api.icndb.com");
-        var category = System.getenv().getOrDefault("EXCLUDE_EXPLICIT", "true");
+        var excludeExplicit = System.getenv().getOrDefault("EXCLUDE_EXPLICIT", "true");
         var jokeUrl = jokesDbUrl + "/jokes/random";
-        if (!Boolean.parseBoolean(category)) {
+        if (Boolean.parseBoolean(excludeExplicit)) {
             jokeUrl += "?exclude=explicit";
         }
         var request = HttpRequest.newBuilder()
