@@ -34,7 +34,7 @@ public class QuoteApplication {
                 .uri(URI.create(jokeUrl))
                 .timeout(Duration.ofMinutes(1))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.noBody())
+                .GET()
                 .build();
 
         server.createContext("/joke", exchange -> {
@@ -50,6 +50,8 @@ public class QuoteApplication {
     private static byte[] getJokeAsBytes(ObjectMapper objectMapper, HttpClient client, HttpRequest request) {
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
         var quoteResult = objectMapper.readValue(response.body(), QuoteResult.class);
-        return objectMapper.writeValueAsBytes(quoteResult.getValue());
+        var joke = quoteResult.getValue();
+        joke.setRating("Check Norris jokes are the best jokes!");
+        return objectMapper.writeValueAsBytes(joke);
     }
 }
