@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chuck-ui
+  name: chuck-ui-v2
   labels:
     app: chuck-ui
 spec:

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chuck-joke-service
+  name: chuck-joke-service-v2
   labels:
     app: chuck-joke-service
 spec:
