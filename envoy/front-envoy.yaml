@@ -18,23 +18,31 @@ static_resources:
               domains:
               - "*"
               routes:
-              - match:
-                  prefix: "/service1"
-                route:
-                  cluster: service1
-                  prefix_rewrite: "/"
-              - match:
-                  prefix: "/service2"
-                route:
-                  cluster: service2
-                  prefix_rewrite: "/"
+                - match:
+                    prefix: "/service21"
+                  route:
+                    cluster: service2
+                    prefix_rewrite: "/"
+                - match:
+                    prefix: "/*"
+                    headers:
+                      name: "x-route-to"
+                      exact_match: "service2"
+                  route:
+                    cluster: service2
+                    prefix_rewrite: "/"
+                - match:
+                    prefix: "/"
+                  route:
+                    cluster: service1
+                    prefix_rewrite: "/"
           http_filters:
           - name: envoy.router
             typed_config: {}
   clusters:
   - name: service1
     connect_timeout: 1s
-    type: static
+    type: STRICT_DNS
     lb_policy: round_robin
     # http2_protocol_options: {}
     load_assignment:
@@ -44,11 +52,18 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: 127.0.0.1
-                port_value: 8010
+                address: service1
+                port_value: 80
+    health_checks:
+      timeout: 0.25s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 3
+      http_health_check:
+        path: "/"
   - name: service2
     connect_timeout: 1s
-    type: static
+    type: STRICT_DNS
     lb_policy: round_robin
     # http2_protocol_options: {}
     load_assignment:
@@ -58,8 +73,15 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: 127.0.0.1
-                port_value: 8020
+                address: service2
+                port_value: 80
+    health_checks:
+      timeout: 0.25s
+      interval: 10s
+      unhealthy_threshold: 3
+      healthy_threshold: 3
+      http_health_check:
+        path: "/"
 admin:
   access_log_path: "/dev/null"
   address:
